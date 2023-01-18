@@ -8,6 +8,12 @@ class UserAPI:
     def add_user(self, name):
         self.users[name] = {}
 
+    def delete_user(self, name):
+        if name in self.users:
+            del self.users[name]
+        else:
+            print(f"User {name} does not exist.")
+
     def set_current_user(self, name):
         if name in self.users:
             self.current_user = name
@@ -37,6 +43,7 @@ class UserAPI:
     def save(self, filename):
         with open(filename, 'wb') as f:
             pickle.dump(self, f)
+
     def load(self):
         with open('user_data.pickle', 'rb') as f:
             user = pickle.load(f)

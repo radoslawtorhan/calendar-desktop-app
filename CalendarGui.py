@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtWidgets import QApplication
 from user import UserAPI
 import os
+
 class GUI(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
@@ -19,6 +20,7 @@ class GUI(QtWidgets.QWidget):
         self.user_combo_box = QtWidgets.QComboBox()
         self.user_combo_box.addItems(self.user.get_all_users())
         self.add_user_button = QtWidgets.QPushButton("Add User")
+        self.delete_user_button = QtWidgets.QPushButton("Delete user")
         self.user_input = QtWidgets.QLineEdit()
 
         # Create layout
@@ -30,6 +32,7 @@ class GUI(QtWidgets.QWidget):
         layout.addWidget(self.user_combo_box)
         layout.addWidget(self.user_input)
         layout.addWidget(self.add_user_button)
+        layout.addWidget(self.delete_user_button)
 
         # Set layout
         self.setLayout(layout)
@@ -39,6 +42,7 @@ class GUI(QtWidgets.QWidget):
         self.add_event_button.clicked.connect(self.add_event)
         self.user_combo_box.currentIndexChanged.connect(self.update_user)
         self.add_user_button.clicked.connect(self.add_user)
+        self.delete_user_button.clicked.connect(self.delete_user)
 
     def display_events(self):
         if self.user.current_user:
@@ -64,13 +68,21 @@ class GUI(QtWidgets.QWidget):
         self.user.add_user(name)
         self.user_combo_box.addItem(name)
         print('user added')
+        self.user.save('user_data.pickle')
 
     def update_user(self):
         user = self.user_combo_box.currentText()
         self.user.set_current_user(user)
         self.display_events()
 
-
+    def delete_user(self):
+        if self.user.current_user:
+            name = self.user_combo_box.currentText()
+            self.user.delete_user(name)
+            self.user_combo_box.removeItem(self.user_combo_box.findText(name))
+            self.user.save('user_data.pickle')
+        else:
+            print('add user first')
 
 if __name__ == '__main__':
     app = QApplication([])
