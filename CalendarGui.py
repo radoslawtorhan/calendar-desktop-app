@@ -39,16 +39,22 @@ class GUI(QtWidgets.QWidget):
         self.add_user_button.clicked.connect(self.add_user)
 
     def display_events(self):
-        date = self.calendar.selectedDate()
-        events = self.user.get_events(date)
-        self.event_list.clear()
-        self.event_list.addItems(events)
+        if self.user.current_user:
+            date = self.calendar.selectedDate()
+            events = self.user.get_events(date)
+            self.event_list.clear()
+            self.event_list.addItems(events)
+        else:
+            print('add user first')
 
     def add_event(self):
-        event = self.event_input.text()
-        date = self.calendar.selectedDate()
-        self.user.add_event(date, event)
-        self.display_events()
+        if self.user.current_user:
+            event = self.event_input.text()
+            date = self.calendar.selectedDate()
+            self.user.add_event(date, event)
+            self.display_events()
+        else:
+            print('add user first')
 
     def add_user(self):
         name = self.user_input.text()
@@ -60,6 +66,7 @@ class GUI(QtWidgets.QWidget):
         user = self.user_combo_box.currentText()
         self.user.set_current_user(user)
         self.display_events()
+
 
 
 if __name__ == '__main__':
