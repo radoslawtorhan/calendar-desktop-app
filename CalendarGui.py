@@ -1,13 +1,15 @@
 from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtWidgets import QApplication
 from user import UserAPI
-
-
+import os
 class GUI(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
-
+        filename = "user_data.pickle"
         self.user = UserAPI()
+        if os.path.exists(filename):
+            self.user = self.user.load()
+
 
         # Create widgets
         self.calendar = QtWidgets.QCalendarWidget()
@@ -53,6 +55,7 @@ class GUI(QtWidgets.QWidget):
             date = self.calendar.selectedDate()
             self.user.add_event(date, event)
             self.display_events()
+            self.user.save('user_data.pickle')
         else:
             print('add user first')
 

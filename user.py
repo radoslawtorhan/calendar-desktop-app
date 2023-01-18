@@ -1,3 +1,4 @@
+import pickle
 class UserAPI:
 
     def __init__(self):
@@ -32,3 +33,11 @@ class UserAPI:
                 return []
         else:
             print("No user selected.")
+
+    def save(self, filename):
+        with open(filename, 'wb') as f:
+            pickle.dump(self, f)
+    def load(self):
+        with open('user_data.pickle', 'rb') as f:
+            user = pickle.load(f)
+            return user
